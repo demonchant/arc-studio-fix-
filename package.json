@@ -1,0 +1,14 @@
+{
+  "name": "arc-usdc-amount-demo",
+  "version": "1.0.0",
+  "private": false,
+  "type": "module",
+  "description": "Exact parsing and formatting for six decimal USDC amounts",
+  "license": "MIT",
+  "scripts": {
+    "test": "node test/usdc.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
