@@ -8,6 +8,13 @@ test('parses whole USDC amounts', () => {
 
 test('parses up to six decimal places exactly', () => {
   assert.equal(parseUsdc('12.340001'), 12_340_001n)
+  assert.equal(parseUsdc('0.000001'), 1n)
+  assert.equal(parseUsdc('9007199254.740993'), 9_007_199_254_740_993n)
+})
+
+test('rejects precision the token cannot represent instead of rounding', () => {
+  assert.throws(() => parseUsdc('0.0000009'), TypeError)
+  assert.throws(() => parseUsdc('1.0000009'), TypeError)
 })
 
 test('formats integer micro USDC without unnecessary zeroes', () => {
@@ -20,4 +27,7 @@ test('rejects malformed and negative input', () => {
   assert.throws(() => parseUsdc(''), TypeError)
   assert.throws(() => parseUsdc('not an amount'), TypeError)
   assert.throws(() => parseUsdc('-0.1'), TypeError)
+  assert.throws(() => parseUsdc('1e3'), TypeError)
+  assert.throws(() => formatUsdc('not an integer'), TypeError)
+  assert.throws(() => formatUsdc(-1n), RangeError)
 })

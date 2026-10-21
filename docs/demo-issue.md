@@ -1,12 +1,3 @@
-# Demo issue draft
-
-Use this text to create the actual issue after the `main` branch has been
-published to GitHub. Do not present this draft as an issue that already exists.
-
-## Title
-
-Reject USDC input with more than six decimal places
-
 ## Description
 
 `parseUsdc` currently converts the input through JavaScript `Number` and rounds

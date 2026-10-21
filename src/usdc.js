@@ -7,27 +7,31 @@ const MICRO_USDC = 1_000_000n
  * @returns {bigint}
  */
 export function parseUsdc(input) {
-  if (typeof input !== 'string' || input.trim() === '') {
-    throw new TypeError('Amount must be a nonempty decimal string')
+  if (typeof input !== 'string') {
+    throw new TypeError('Amount must be a decimal string')
   }
 
-  const value = Number(input)
-  if (!Number.isFinite(value) || value < 0) {
-    throw new TypeError('Amount must be a nonnegative number')
+  const match = /^(0|[1-9]\d*)(?:\.(\d{1,6}))?$/.exec(input)
+  if (!match) {
+    throw new TypeError('Amount must be nonnegative and use at most six decimal places')
   }
 
-  // Bug for the demo issue: floating point rounding accepts and changes
-  // amounts with more than six decimal places instead of rejecting them.
-  return BigInt(Math.round(value * Number(MICRO_USDC)))
+  const whole = BigInt(match[1])
+  const fraction = BigInt((match[2] ?? '').padEnd(6, '0') || '0')
+  return whole * MICRO_USDC + fraction
 }
 
 /**
  * Format an integer count of micro USDC as a decimal string.
  *
- * @param {bigint | string | number} amount
+ * @param {bigint | string} amount
  * @returns {string}
  */
 export function formatUsdc(amount) {
+  if (typeof amount !== 'bigint' && (typeof amount !== 'string' || !/^-?\d+$/.test(amount))) {
+    throw new TypeError('Amount must be an integer string or bigint')
+  }
+
   const raw = BigInt(amount)
   if (raw < 0n) throw new RangeError('Amount must not be negative')
 
